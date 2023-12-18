@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public enum PlayerState { Idle, Running, Jumping, Falling,Dead }
 
-public class Player : MonoBehaviour
+public class Player : Character
 {
 
     [SerializeField] private float speed;
@@ -30,6 +30,10 @@ public class Player : MonoBehaviour
 
     private Vector2 direction = Vector2.right;
 
+    private AudioSource audioSource;
+
+    public AudioClip clip;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -41,6 +45,7 @@ public class Player : MonoBehaviour
     void Start()
     {
         player = GetComponent<Player>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -52,6 +57,7 @@ public class Player : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             weapon.Shoot();
+            audioSource.PlayOneShot(clip);
         }
 
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded())
@@ -156,8 +162,9 @@ public class Player : MonoBehaviour
      
     public Vector2 GetDirection() { return direction; }
 
-    public void TakeDamage()
+    public override void TakeDamage()
     {
+        base.TakeDamage();
         hearts = Mathf.Clamp(hearts - 1, 0, hearts);
         hearts_UI[hearts].SetHeartEmpty();
 

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour
+public class Enemy : Character
 {
     [SerializeField] private float fire_rate = 2f;
 
@@ -31,6 +31,16 @@ public class Enemy : MonoBehaviour
         {
             weapon.Shoot();
             deltaTimeFire = 0;
+        }
+    }
+
+    public override void TakeDamage()
+    {
+        base.TakeDamage();
+
+        if(hearts == 0)
+        {
+            Destroy(gameObject);
         }
     }
 
